@@ -4,7 +4,7 @@ const tokenizer = require('./tokenizer')
 const parser = require('./parser')
 const makeJs = require('./makejs')
 
-const filePath = path.resolve(__dirname,"../source.cook")
+const filePath = path.resolve(__dirname,"../sourceCode.cook")
 
 const code = fs.readFileSync(filePath,'utf-8')
 console.log("sourceCode\n",code)

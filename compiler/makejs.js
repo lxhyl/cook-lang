@@ -1,6 +1,6 @@
-function makeJs(ast){
+function makeJs(ast) {
   const dfs = node => {
-    switch(node.type){
+    switch (node.type) {
       case 'defineVariable':
         return 'let '
       case 'variable':
@@ -18,17 +18,31 @@ function makeJs(ast){
       case 'callExpression':
         const params = node.params
         let paramsCode = '('
-        for(let i =0;i<params.length;i++){
+        for (let i = 0; i < params.length; i++) {
           paramsCode += dfs(params[i])
         }
         paramsCode += ')'
         return paramsCode
+      case 'midParen':
+        {
+          const params = node.params
+          let paramsCode = '{\n'
+          for (let i = 0; i < params.length; i++) {
+            paramsCode += dfs(params[i])
+          }
+          paramsCode += '}'
+          return paramsCode
+        }
+      case 'defineFun':
+        return 'function '
+      case 'return':
+        return 'return '
       default:
         return ''
     }
   }
   let code = '\n\n'
-  for(let i = 0;i<ast.body.length;i++){
+  for (let i = 0; i < ast.body.length; i++) {
     code += dfs(ast.body[i])
   }
   return code

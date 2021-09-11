@@ -1,13 +1,7 @@
 const keywords = require('./keywords')
 // 是否空格
 const isSpace = s => /\s/.test(s) 
-// 是否换行
-const isNextLine = s => {
-  
-  const value = !!s
-  console.log(s,value)
-  return value
-}
+
 // 是否关键字
 const isKeyword = s => keywords.has(s)
 // 是否中文
@@ -60,12 +54,12 @@ function tokenizer(code){
       }
       tokens.push({type:'number',value:Number(value)})
     }
-    if(str === '='){
+    if(str === ':'){
        tokens.push({type:'equalSign',name:'equalSign'})
        index++
        continue
     }
-    if(str === '+'){
+    if(str === ','){
       tokens.push({type:'add'})
       index++
       continue
@@ -82,6 +76,16 @@ function tokenizer(code){
     }
     if(str === ')'){
       tokens.push({type:'paren',value:')'})
+      index++
+      continue
+    }
+    if(str === "{"){
+      tokens.push({type:'midParen',value:"{"})
+      index++
+      continue
+    }
+    if(str === "}"){
+      tokens.push({type:'midParen',value:"}"})
       index++
       continue
     }

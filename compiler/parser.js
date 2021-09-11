@@ -8,15 +8,11 @@ function parser(tokens) {
   let index = 0
   function parse() {
     let token = tokens[index]
-    // 不含括号时说明没有字节点，是平行关系
-    if (token.type !== 'paren') {
-      index++
-      return token
-    } else { // 处理括号里面的
+
+    if (token.type === 'paren') { // 处理括号里面的
       if (token.value === '(') {
         token = tokens[++index]
       }
-      
       const node = {
         type: 'callExpression',
         name: token.value,
@@ -29,9 +25,29 @@ function parser(tokens) {
         if (!token) break
       }
       index++
-      console.log('token',token)
       return node
     }
+    if (token.type === 'midParen') {
+      if (token.value === '{') {
+        token = tokens[++index]
+      }
+      const node = {
+        type: 'midParen',
+        name: token.value,
+        params: []
+      }
+      // 遇到左括号或其他
+      while (token.value !== '}') {
+        node.params.push(parse())
+        token = tokens[index]
+        if (!token) break
+      }
+      index++
+      return node
+    }
+    // 不含括号时说明没有字节点，是平行关系
+    index++
+    return token
   }
   const ast = {
     type: 'Program',
